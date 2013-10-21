@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!-- Override default request -->
+        <parameter key="router.class">Blablacar\I18nRoutingBundle\Routing\Router</parameter>
+        <parameter key="jms_i18n_routing.router.class">Blablacar\I18nRoutingBundle\Routing\I18nRouter</parameter>
+
+        <parameter key="blablacar_optimized_routing.generator.class">Blablacar\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
+        <parameter key="blablacar_optimized_routing.cache_warmer.class">Blablacar\I18nRoutingBundle\CacheWarmer\RouterCacheWarmer</parameter>
+
+        <!-- Cache -->
+        <parameter key="blablacar_optimized_routing.cache.file.class">Blablacar\I18nRoutingBundle\Routing\Cache\FileCache</parameter>
+        <parameter key="blablacar_optimized_routing.cache.jms_i18n_routing_file.class">Blablacar\I18nRoutingBundle\Routing\Cache\JMSI18nRoutingFileCache</parameter>
+
+    </parameters>
+
+    <services>
+        <service id="blablacar_optimized_routing.generator" class="%blablacar_optimized_routing.generator.class%" public="false">
+            <argument type="service" id="router.request_context" />
+            <argument type="service" id="blablacar_optimized_routing.cache.default" />
+        </service>
+
+        <service id="blablacar_optimized_routing.cache_warmer" class="%blablacar_optimized_routing.cache_warmer.class%">
+            <tag name="kernel.cache_warmer" />
+            <argument type="service" id="router" />
+            <argument type="service" id="blablacar_optimized_routing.cache.default" />
+        </service>
+
+        <!-- Cache -->
+        <service id="blablacar_optimized_routing.cache.file" class="%blablacar_optimized_routing.cache.file.class%">
+            <argument>%kernel.cache_dir%</argument>
+        </service>
+        <service id="blablacar_optimized_routing.cache.jms_i18n_routing_file" class="%blablacar_optimized_routing.cache.jms_i18n_routing_file.class%" parent="blablacar_optimized_routing.cache.file" />
+
+        <service id="blablacar_optimized_routing.cache.default" alias="blablacar_optimized_routing.cache.jms_i18n_routing_file" />
+    </services>
+</container>
+
