@@ -2,7 +2,7 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Cache;
 
-use JMS\I18nRoutingBundle\Router\I18nLoader;
+use Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader;
 
 class I18nRoutingFileCache extends FileCache
 {
