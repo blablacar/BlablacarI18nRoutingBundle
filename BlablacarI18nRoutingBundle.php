@@ -4,7 +4,7 @@ namespace Blablacar\I18nRoutingBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Blablacar\I18nRoutingBundle\DependencyInjection\Compiler\RouterCompilerPass;
+use Blablacar\I18nRoutingBundle\DependencyInjection\Compiler\SetRouterPass;
 
 class BlablacarI18nRoutingBundle extends Bundle
 {
@@ -12,6 +12,6 @@ class BlablacarI18nRoutingBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new RouterCompilerPass());
+        $container->addCompilerPass(new SetRouterPass());
     }
 }

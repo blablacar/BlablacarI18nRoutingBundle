@@ -5,8 +5,17 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!-- Override default request -->
-        <parameter key="router.class">Blablacar\I18nRoutingBundle\Routing\Router</parameter>
+        <!-- Router -->
+        <parameter key="blablacar_i18n_routing.router.class">Blablacar\I18nRoutingBundle\Routing\Router</parameter>
+        <!-- LocaleResolver -->
+        <parameter key="blablacar_i18n_routing.locale_resolver.default.class">Blablacar\I18nRoutingBundle\Routing\DefaultLocaleResolver</parameter>
+
+        <!-- Loader -->
+        <parameter key="blablacar_i18n_routing.loader.class">Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader</parameter>
+        <parameter key="blablacar_i18n_routing.route_exclusion_strategy.class">Blablacar\I18nRoutingBundle\Routing\Loader\DefaultRouteExclusionStrategy</parameter>
+        <parameter key="blablacar_i18n_routing.pattern_generation_strategy.class">Blablacar\I18nRoutingBundle\Routing\Loader\DefaultPatternGenerationStrategy</parameter>
+
+
 
         <parameter key="blablacar_optimized_routing.generator.class">Blablacar\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
         <parameter key="blablacar_optimized_routing.cache_warmer.class">Blablacar\I18nRoutingBundle\CacheWarmer\RouterCacheWarmer</parameter>
@@ -18,6 +27,43 @@
     </parameters>
 
     <services>
+        <!-- Router -->
+        <service id="blablacar_i18n_routing.router" class="%blablacar_i18n_routing.router.class%" parent="router.default" public="false">
+            <call method="setLocaleResolver">
+                <argument type="service" id="blablacar_i18n_routing.locale_resolver" />
+            </call>
+            <call method="setGenerator">
+                <argument type="service" id="blablacar_optimized_routing.generator" />
+            </call>
+            <call method="setLoader">
+                <argument type="service" id="blablacar_i18n_routing.loader" />
+            </call>
+        </service>
+
+        <!-- LocaleResolver -->
+        <service id="blablacar_i18n_routing.locale_resolver.default" class="%blablacar_i18n_routing.locale_resolver.default.class%" public="false">
+        </service>
+        <service id="blablacar_i18n_routing.locale_resolver" alias="blablacar_i18n_routing.locale_resolver.default" />
+
+        <!-- Loader -->
+        <service id="blablacar_i18n_routing.route_exclusion_strategy" class="%blablacar_i18n_routing.route_exclusion_strategy.class%" public="false" />
+        <service id="blablacar_i18n_routing.pattern_generation_strategy.default" class="%blablacar_i18n_routing.pattern_generation_strategy.class%" public="false">
+            <argument type="service" id="translator" />
+            <argument>%available_locales%</argument>
+            <argument>%kernel.cache_dir%</argument>
+            <argument>routes</argument>
+        </service>
+        <service id="blablacar_i18n_routing.pattern_generation_strategy" alias="blablacar_i18n_routing.pattern_generation_strategy.default" public="false" />
+        <service id="blablacar_i18n_routing.loader" class="%blablacar_i18n_routing.loader.class%">
+            <argument type="service" id="blablacar_i18n_routing.route_exclusion_strategy" />
+            <argument type="service" id="blablacar_i18n_routing.pattern_generation_strategy" />
+        </service>
+
+
+
+
+
+
         <service id="blablacar_optimized_routing.generator" class="%blablacar_optimized_routing.generator.class%" public="false">
             <argument type="service" id="router.request_context" />
             <argument type="service" id="blablacar_optimized_routing.cache.default" />
