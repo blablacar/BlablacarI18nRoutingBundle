@@ -7,14 +7,13 @@
     <parameters>
         <!-- Override default request -->
         <parameter key="router.class">Blablacar\I18nRoutingBundle\Routing\Router</parameter>
-        <parameter key="jms_i18n_routing.router.class">Blablacar\I18nRoutingBundle\Routing\I18nRouter</parameter>
 
         <parameter key="blablacar_optimized_routing.generator.class">Blablacar\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
         <parameter key="blablacar_optimized_routing.cache_warmer.class">Blablacar\I18nRoutingBundle\CacheWarmer\RouterCacheWarmer</parameter>
 
         <!-- Cache -->
         <parameter key="blablacar_optimized_routing.cache.file.class">Blablacar\I18nRoutingBundle\Routing\Cache\FileCache</parameter>
-        <parameter key="blablacar_optimized_routing.cache.jms_i18n_routing_file.class">Blablacar\I18nRoutingBundle\Routing\Cache\JMSI18nRoutingFileCache</parameter>
+        <parameter key="blablacar_optimized_routing.cache.i18n_routing_file.class">Blablacar\I18nRoutingBundle\Routing\Cache\I18nRoutingFileCache</parameter>
 
     </parameters>
 
@@ -34,9 +33,9 @@
         <service id="blablacar_optimized_routing.cache.file" class="%blablacar_optimized_routing.cache.file.class%">
             <argument>%kernel.cache_dir%</argument>
         </service>
-        <service id="blablacar_optimized_routing.cache.jms_i18n_routing_file" class="%blablacar_optimized_routing.cache.jms_i18n_routing_file.class%" parent="blablacar_optimized_routing.cache.file" />
+        <service id="blablacar_optimized_routing.cache.i18n_routing_file" class="%blablacar_optimized_routing.cache.i18n_routing_file.class%" parent="blablacar_optimized_routing.cache.file" />
 
-        <service id="blablacar_optimized_routing.cache.default" alias="blablacar_optimized_routing.cache.jms_i18n_routing_file" />
+        <service id="blablacar_optimized_routing.cache.default" alias="blablacar_optimized_routing.cache.i18n_routing_file" />
     </services>
 </container>
 

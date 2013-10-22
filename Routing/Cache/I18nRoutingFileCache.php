@@ -4,7 +4,7 @@ namespace Blablacar\I18nRoutingBundle\Routing\Cache;
 
 use JMS\I18nRoutingBundle\Router\I18nLoader;
 
-class JMSI18nRoutingFileCache extends FileCache
+class I18nRoutingFileCache extends FileCache
 {
     /**
      * {@inheritDoc}
