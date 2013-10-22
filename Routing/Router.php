@@ -116,7 +116,7 @@ class Router extends BaseRouter
 
         // Only 1 locale available for the retrieved route
         if (isset($params['_locale'])) {
-            if ($currentLocale === $params['locale']) {
+            if ($currentLocale === $params['_locale']) {
                 return $params;
             } else {
                 return false;
