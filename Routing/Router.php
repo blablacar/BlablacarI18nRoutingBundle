@@ -26,10 +26,6 @@ class Router extends BaseRouter
         parent::__construct($container, $resource, $options, $context);
     }
 
-
-
-
-
     /**
      * Sets the host map to use.
      *
@@ -127,12 +123,8 @@ class Router extends BaseRouter
             }
         }
 
-        if (!isset($params['_locales'])) {
-            return false;
-        }
-
         // The current locale is not found for the retrieved route
-        if (!in_array($currentLocale, $params['_locales'], true)) {
+        if (isset($params['_locales']) && !in_array($currentLocale, $params['_locales'], true)) {
             return false;
         }
 
