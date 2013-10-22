@@ -114,6 +114,10 @@ class Router extends BaseRouter
             );
         }
 
+        if (false !== $pos = strpos($params['_route'], I18nLoader::ROUTING_PREFIX)) {
+            $params['_route'] = substr($params['_route'], $pos + strlen(I18nLoader::ROUTING_PREFIX));
+        }
+
         // Only 1 locale available for the retrieved route
         if (isset($params['_locale'])) {
             if ($currentLocale === $params['_locale']) {
@@ -126,10 +130,6 @@ class Router extends BaseRouter
         // The current locale is not found for the retrieved route
         if (isset($params['_locales']) && !in_array($currentLocale, $params['_locales'], true)) {
             return false;
-        }
-
-        if (false !== $pos = strpos($params['_route'], I18nLoader::ROUTING_PREFIX)) {
-            $params['_route'] = substr($params['_route'], $pos + strlen(I18nLoader::ROUTING_PREFIX));
         }
 
         unset($params['_locales']);
