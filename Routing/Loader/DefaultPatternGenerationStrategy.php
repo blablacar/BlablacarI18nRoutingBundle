@@ -12,13 +12,15 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
     private $translationDomain;
     private $locales;
     private $cacheDir;
+    private $defaultLocale;
 
-    public function __construct(TranslatorInterface $translator, array $locales, $cacheDir, $translationDomain = 'routes')
+    public function __construct(TranslatorInterface $translator, array $locales, $cacheDir, $translationDomain = 'routes', $defaultLocale = 'en_GB')
     {
         $this->translator        = $translator;
         $this->locales           = $locales;
         $this->cacheDir          = $cacheDir;
         $this->translationDomain = $translationDomain;
+        $this->defaultLocale     = $defaultLocale;
     }
 
     /**
@@ -30,8 +32,8 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
         $patterns = array();
 
         // "routes" option which store all translations for a given route (TODO: required after refacto)
-        if (null !== ($routes = $route->getOption('routes')) && !isset($routes['en_GB'])) {
-            throw new \InvalidArgumentException(sprintf('The "path" option for the route "%s" must have at least the en_GB translation.', $routeName));
+        if (null !== ($routes = $route->getOption('routes')) && !isset($routes[$this->defaultLocale])) {
+            throw new \InvalidArgumentException(sprintf('The "path" option for the route "%s" must have at least the %s translation.', $routeName, $this->defaultLocale));
         }
 
         foreach ($locales as $locale) {
@@ -40,7 +42,7 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
 
             // overload the routes' translations from translations' files by the routes' translations from route' files
             if (null !== $routes) {
-                $i18nPattern = (isset($routes[$locale]) ? $routes[$locale] : $routes['en_GB']);
+                $i18nPattern = (isset($routes[$locale]) ? $routes[$locale] : $routes[$this->defaultLocale]);
             }
 
             if ($routeName === $i18nPattern) {
