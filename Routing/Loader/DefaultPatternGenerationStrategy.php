@@ -35,6 +35,12 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
      * @var string
      */
     private $cacheDir;
+
+    /**
+     * Default locale
+     *
+     * @var string
+     */
     private $defaultLocale;
 
     /**
