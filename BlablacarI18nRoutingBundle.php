@@ -2,9 +2,9 @@
 
 namespace Blablacar\I18nRoutingBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Blablacar\I18nRoutingBundle\DependencyInjection\Compiler\SetRouterPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BlablacarI18nRoutingBundle extends Bundle
 {

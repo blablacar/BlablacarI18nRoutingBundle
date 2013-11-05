@@ -2,14 +2,14 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Config\ConfigCache;
-use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Routing\RequestContext;
 use Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
 
 class Router extends BaseRouter
 {
@@ -40,9 +40,9 @@ class Router extends BaseRouter
     /**
      * Generates a URL from the given parameters.
      *
-     * @param  string  $name       The name of the route
-     * @param  array   $parameters An array of parameters
-     * @param  Boolean $absolute   Whether to generate an absolute URL
+     * @param string  $name       The name of the route
+     * @param array   $parameters An array of parameters
+     * @param Boolean $absolute   Whether to generate an absolute URL
      *
      * @return string The generated URL
      */
@@ -86,7 +86,6 @@ class Router extends BaseRouter
             // fallback to default behavior
         }
 
-
         // use the default behavior if no localized route exists
         return $generator->generate($name, $parameters, $absolute);
     }
@@ -96,7 +95,7 @@ class Router extends BaseRouter
      *
      * Returns false if no route matches the URL.
      *
-     * @param  string $url URL to be parsed
+     * @param string $url URL to be parsed
      *
      * @return array|false An array of parameters or false if no route matches
      */
@@ -199,7 +198,6 @@ class Router extends BaseRouter
     {
         return parent::getRouteCollection();
     }
-
 
     public function setGenerator(UrlGeneratorInterface $generator)
     {

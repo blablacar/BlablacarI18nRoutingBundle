@@ -2,8 +2,8 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Loader;
 
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Implementations are responsible for generating the i18n patterns
@@ -17,7 +17,7 @@ interface PatternGenerationStrategyInterface
      * Returns the i18n patterns for a given route.
      *
      * @param string $routeName
-     * @param Route $route
+     * @param Route  $route
      *
      * @return array<string, array<string>> an array mapping the pattern to an array of locales
      */

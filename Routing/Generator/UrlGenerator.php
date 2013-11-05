@@ -2,11 +2,11 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Generator;
 
+use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator as BaseUrlGenerator;
 use Symfony\Component\Routing\RequestContext;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouteCollection;
-use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
 
 class UrlGenerator extends BaseUrlGenerator
 {

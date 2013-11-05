@@ -10,7 +10,7 @@ interface RouteExclusionStrategyInterface
      * Implementations determine whether the given route is eligible for i18n.
      *
      * @param string $routeName
-     * @param Route $route
+     * @param Route  $route
      *
      * @return Boolean
      */

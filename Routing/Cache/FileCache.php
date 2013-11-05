@@ -2,9 +2,9 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Cache;
 
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 class FileCache implements CacheInterface
 {

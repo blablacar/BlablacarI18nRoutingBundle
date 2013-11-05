@@ -15,8 +15,6 @@
         <parameter key="blablacar_i18n_routing.route_exclusion_strategy.class">Blablacar\I18nRoutingBundle\Routing\Loader\DefaultRouteExclusionStrategy</parameter>
         <parameter key="blablacar_i18n_routing.pattern_generation_strategy.class">Blablacar\I18nRoutingBundle\Routing\Loader\DefaultPatternGenerationStrategy</parameter>
 
-
-
         <parameter key="blablacar_optimized_routing.generator.class">Blablacar\I18nRoutingBundle\Routing\Generator\UrlGenerator</parameter>
         <parameter key="blablacar_optimized_routing.cache_warmer.class">Blablacar\I18nRoutingBundle\CacheWarmer\RouterCacheWarmer</parameter>
 
@@ -60,11 +58,6 @@
             <argument type="service" id="blablacar_i18n_routing.pattern_generation_strategy" />
         </service>
 
-
-
-
-
-
         <service id="blablacar_optimized_routing.generator" class="%blablacar_optimized_routing.generator.class%" public="false">
             <argument type="service" id="router.request_context" />
             <argument type="service" id="blablacar_optimized_routing.cache.default" />
@@ -85,4 +78,3 @@
         <service id="blablacar_optimized_routing.cache.default" alias="blablacar_optimized_routing.cache.i18n_routing_file" />
     </services>
 </container>
-
