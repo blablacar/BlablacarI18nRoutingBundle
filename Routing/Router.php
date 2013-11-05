@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RequestContext;
 use Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class Router extends BaseRouter
 {
@@ -104,38 +105,38 @@ class Router extends BaseRouter
         $params = $this->getMatcher()->match($url);
 
         if (false === $params) {
-            return false;
+            throw new ResourceNotFoundException();
         }
 
         // No request. What append ?
+        $currentLocale = null;
         if ($this->container->isScopeActive('request')) {
             $currentLocale = $this->localeResolver->resolveLocale(
                 $this->container->get('request')
             );
         }
 
+        // Clean the route name
         if (false !== $pos = strpos($params['_route'], I18nLoader::ROUTING_PREFIX)) {
             $params['_route'] = substr($params['_route'], $pos + strlen(I18nLoader::ROUTING_PREFIX));
         }
 
-        // Only 1 locale available for the retrieved route
+        // Retrieve all authorized locales for the given route
+        $routeLocales = array();
         if (isset($params['_locale'])) {
-            if ($currentLocale === $params['_locale']) {
-                return $params;
-            } else {
-                return false;
-            }
+            $routeLocales = array($params['_locale']);
+        } elseif (isset($params['_locales'])) {
+            $routeLocales = $params['_locales'];
+            unset($params['_locales']);
         }
 
-        // The current locale is not found for the retrieved route
-        if (isset($params['_locales']) && !in_array($currentLocale, $params['_locales'], true)) {
-            return false;
+        if (0 === count($routeLocales) || in_array($currentLocale, $routeLocales)) {
+            $params['_locale'] = $currentLocale;
+
+            return $params;
         }
 
-        unset($params['_locales']);
-        $params['_locale'] = $currentLocale;
-
-        return $params;
+        throw new ResourceNotFoundException();
     }
 
     /**
