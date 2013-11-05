@@ -11,15 +11,31 @@ class I18nLoader
 {
     const ROUTING_PREFIX = '__RG__';
 
+    /**
+     * @var RouteExclusionStrategyInterface
+     */
     private $routeExclusionStrategy;
+
+    /**
+     * @var PatternGenerationStrategyInterface
+     */
     private $patternGenerationStrategy;
 
+    /**
+     * @param RouteExclusionStrategyInterface    $routeExclusionStrategy
+     * @param PatternGenerationStrategyInterface $patternGenerationStrategy
+     */
     public function __construct(RouteExclusionStrategyInterface $routeExclusionStrategy, PatternGenerationStrategyInterface $patternGenerationStrategy)
     {
         $this->routeExclusionStrategy = $routeExclusionStrategy;
         $this->patternGenerationStrategy = $patternGenerationStrategy;
     }
 
+    /**
+     * @param RouteCollection $collection
+     *
+     * @return RouteCollection
+     */
     public function load(RouteCollection $collection)
     {
         $i18nCollection = new RouteCollection();

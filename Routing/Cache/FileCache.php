@@ -8,13 +8,26 @@ use Symfony\Component\Routing\RouteCollection;
 
 class FileCache implements CacheInterface
 {
-    protected $cacheDir;
+    /**
+     * Cache path
+     *
+     * @var string
+     */
+    protected $cachePath;
 
+    /**
+     * Cached routes
+     *
+     * @var array
+     */
     protected $cachedRoutes = array();
 
+    /**
+     * @param string $cacheDir
+     */
     public function __construct($cacheDir)
     {
-        $this->cacheDir = $cacheDir . DIRECTORY_SEPARATOR . 'routing';
+        $this->cachePath = $cacheDir . DIRECTORY_SEPARATOR . 'routing';
     }
 
     /**
@@ -23,19 +36,19 @@ class FileCache implements CacheInterface
     public function storeRouteCollection(RouteCollection $routeCollection)
     {
         // we need the directory no matter the proxy cache generation strategy
-        if (!is_dir($this->cacheDir)) {
-            if (false === @mkdir($this->cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf('Unable to create the Router directory "%s".', $this->cacheDir));
+        if (!is_dir($this->cachePath)) {
+            if (false === @mkdir($this->cachePath, 0777, true)) {
+                throw new \RuntimeException(sprintf('Unable to create the Router directory "%s".', $this->cachePath));
             }
-        } elseif (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf('The Router directory "%s" is not writeable for the current system user.', $this->cacheDir));
+        } elseif (!is_writable($this->cachePath)) {
+            throw new \RuntimeException(sprintf('The Router directory "%s" is not writeable for the current system user.', $this->cachePath));
         }
 
         $routeCollections = $this->splitRouteCollection($routeCollection);
 
         foreach ($routeCollections as $prefix => $routeCollection) {
             $routes = $this->compileRouteCollection($routeCollection);
-            file_put_contents($this->cacheDir.'/'.$prefix.'.php', $routes);
+            file_put_contents($this->cachePath.'/'.$prefix.'.php', $routes);
         }
     }
 
@@ -46,7 +59,7 @@ class FileCache implements CacheInterface
     {
         $prefix = $this->getPrefix($name);
         if (!array_key_exists($prefix, $this->cachedRoutes)) {
-            $cacheFile = $this->cacheDir . DIRECTORY_SEPARATOR . $prefix . '.php';
+            $cacheFile = $this->cachePath . DIRECTORY_SEPARATOR . $prefix . '.php';
             if (! file_exists($cacheFile)) {
                 throw new RouteNotFoundException(sprintf(
                     'Unable to generate a URL for the named route "%s" as such route does not exist (The cache file with name "%s" was not found',

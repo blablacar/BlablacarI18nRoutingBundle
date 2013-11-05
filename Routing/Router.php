@@ -13,17 +13,48 @@ use Symfony\Component\Routing\RequestContext;
 
 class Router extends BaseRouter
 {
+    /**
+     * Container
+     *
+     * @var ContainerInterface
+     */
     private $container;
 
+    /**
+     * Locale resolver
+     *
+     * @var LocaleResolverInterface
+     */
     protected $localeResolver;
+
+    /**
+     * Generator
+     *
+     * @var UrlGeneratorInterface
+     */
     protected $generator;
+
+    /**
+     * Loader
+     *
+     * @var I18nLoader
+     */
     protected $loader;
 
+    /**
+     * Host map
+     *
+     * @var array
+     */
     private $hostMap = array();
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null)
     {
         $this->container = $container;
+
         parent::__construct($container, $resource, $options, $context);
     }
 
@@ -187,6 +218,9 @@ class Router extends BaseRouter
         return $cleaner->clean($this->getRouteCollection());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRouteCollection()
     {
         $collection = parent::getRouteCollection();
@@ -194,26 +228,41 @@ class Router extends BaseRouter
         return $this->loader->load($collection);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOriginalRouteCollection()
     {
         return parent::getRouteCollection();
     }
 
+    /**
+     * @param UrlGeneratorInterface $generator
+     */
     public function setGenerator(UrlGeneratorInterface $generator)
     {
         $this->generator = $generator;
     }
 
+    /**
+     * @return UrlGeneratorInterface
+     */
     public function getGenerator()
     {
         return $this->generator;
     }
 
+    /**
+     * @param LocaleResolverInterface $resolver
+     */
     public function setLocaleResolver(LocaleResolverInterface $resolver)
     {
         $this->localeResolver = $resolver;
     }
 
+    /**
+     * @param I18nLoader $loader
+     */
     public function setLoader(I18nLoader $loader)
     {
         $this->loader = $loader;

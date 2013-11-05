@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Route;
  */
 class DefaultRouteExclusionStrategy implements RouteExclusionStrategyInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function shouldExcludeRoute($routeName, Route $route)
     {
         if ('_' === $routeName[0]) {
