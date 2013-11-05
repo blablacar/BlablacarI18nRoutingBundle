@@ -22,6 +22,10 @@ class RouterCacheWarmer implements CacheWarmerInterface
      */
     protected $cache;
 
+    /**
+     * @param RouterInterface $router
+     * @param CacheInterface  $cache
+     */
     public function __construct(RouterInterface $router, CacheInterface $cache)
     {
         $this->router = $router;

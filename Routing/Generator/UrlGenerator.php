@@ -10,13 +10,22 @@ use Symfony\Component\Routing\RouteCollection;
 
 class UrlGenerator extends BaseUrlGenerator
 {
+    /**
+     * Cache
+     *
+     * @var CacheInterface
+     */
     protected $cache;
 
-    protected $cachedRoutes = array();
-
+    /**
+     * @param RequestContext  $context
+     * @param CacheInterface  $cache
+     * @param LoggerInterface $logger
+     */
     public function __construct(RequestContext $context, CacheInterface $cache, LoggerInterface $logger = null)
     {
         parent::__construct(new RouteCollection(), $context, $logger);
+
         $this->cache = $cache;
     }
 

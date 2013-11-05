@@ -8,12 +8,48 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInterface
 {
+    /**
+     * Translator
+     *
+     * @var TranslatorInterface
+     */
     private $translator;
+
+    /**
+     * Translation domain
+     *
+     * @var string
+     */
     private $translationDomain;
+
+    /**
+     * Locales
+     *
+     * @var array
+     */
     private $locales;
+
+    /**
+     * Cache directory
+     *
+     * @var string
+     */
     private $cacheDir;
+
+    /**
+     * Default locale
+     *
+     * @var string
+     */
     private $defaultLocale;
 
+    /**
+     * @param TranslatorInterface $translator
+     * @param array               $locales
+     * @param string              $cacheDir
+     * @param string              $translationDomain
+     * @param string              $defaultLocale
+     */
     public function __construct(TranslatorInterface $translator, array $locales, $cacheDir, $translationDomain = 'routes', $defaultLocale = 'en_GB')
     {
         $this->translator        = $translator;
@@ -61,11 +97,33 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
     public function addResources(RouteCollection $i18nCollection)
     {
         foreach ($this->locales as $locale) {
-            if (file_exists($metadata = $this->cacheDir.'/translations/catalogue.'.$locale.'.php.meta')) {
-                foreach (unserialize(file_get_contents($metadata)) as $resource) {
-                    $i18nCollection->addResource($resource);
-                }
+            $metadata = $this->getMetaDataFilePath($locale);
+
+            if (!file_exists($metadata)) {
+                continue;
+            }
+
+            foreach (unserialize(file_get_contents($metadata)) as $resource) {
+                $i18nCollection->addResource($resource);
             }
         }
+    }
+
+    /**
+     * Gets the metadata file path according given locale
+     *
+     * @param string $locale
+     *
+     * @return string
+     */
+    private function getMetaDataFilePath($locale)
+    {
+        $metadata = sprintf(
+            '%s/translations/catalogue/catalogue.%s.php.meta',
+            $this->cacheDir,
+            $locale
+        );
+
+        return $metadata;
     }
 }

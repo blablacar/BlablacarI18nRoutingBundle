@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DefaultLocaleResolver implements LocaleResolverInterface
 {
+    /**
+     * Host map
+     *
+     * @var array
+     */
     private $hostMap;
 
     public function __construct(array $hostMap = array())

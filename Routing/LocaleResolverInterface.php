@@ -15,6 +15,8 @@ interface LocaleResolverInterface
     /**
      * Resolves the locale in case a route is available for multiple locales.
      *
+     * @param Request $request
+     *
      * @return string|null return the locale guessed from request or null if nothing is found
      */
     public function resolveLocale(Request $request);
