@@ -52,6 +52,7 @@
             <argument>%available_locales%</argument>
             <argument>%kernel.cache_dir%</argument>
             <argument>routes</argument>
+            <argument>%default_locale%</argument>
         </service>
         <service id="blablacar_i18n_routing.pattern_generation_strategy" alias="blablacar_i18n_routing.pattern_generation_strategy.default" public="false" />
         <service id="blablacar_i18n_routing.loader" class="%blablacar_i18n_routing.loader.class%">
