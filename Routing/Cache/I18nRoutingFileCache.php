@@ -11,8 +11,10 @@ class I18nRoutingFileCache extends FileCache
      */
     protected function getPrefix($name)
     {
-        if (preg_match('#(.*)'.I18nLoader::ROUTING_PREFIX.'.*#', $name, $matches)) {
-            return $matches[1];
+        $parts = explode(I18nLoader::ROUTING_PREFIX, $name, 2);
+
+        if (count($parts) > 1) {
+            return array_shift($parts);
         }
 
         return parent::getPrefix($name);
