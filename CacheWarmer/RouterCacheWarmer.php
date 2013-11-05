@@ -2,14 +2,24 @@
 
 namespace Blablacar\I18nRoutingBundle\CacheWarmer;
 
+use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Routing\RouteCollection;
-use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
 
 class RouterCacheWarmer implements CacheWarmerInterface
 {
+    /**
+     * Router
+     *
+     * @var RouterInterface
+     */
     protected $router;
+
+    /**
+     * Cache
+     *
+     * @var CacheInterface
+     */
     protected $cache;
 
     public function __construct(RouterInterface $router, CacheInterface $cache)

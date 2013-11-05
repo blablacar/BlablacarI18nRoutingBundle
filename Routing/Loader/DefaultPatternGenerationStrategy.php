@@ -2,9 +2,9 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Loader;
 
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Routing\Route;
 
 class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInterface
 {

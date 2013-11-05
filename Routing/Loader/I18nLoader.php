@@ -2,11 +2,7 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing\Loader;
 
-use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use JMS\I18nRoutingBundle\Util\RouteExtractor;
-use Symfony\Component\Config\Loader\LoaderResolver;
 
 /**
  * This loader expands all routes which are eligible for i18n.
