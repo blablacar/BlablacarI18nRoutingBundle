@@ -79,6 +79,10 @@ class Router extends BaseRouter
      */
     public function generate($name, $parameters = array(), $absolute = false)
     {
+        if (null === $name || empty($name)) {
+            throw new \InvalidArgumentException('The route name is empty');
+        }
+
         // determine the most suitable locale to use for route generation
         $currentLocale = $this->context->getParameter('_locale');
         if (isset($parameters['_locale'])) {
