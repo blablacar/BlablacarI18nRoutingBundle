@@ -3,6 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
+        <!-- Override default HttpUtils -->
+        <parameter key="security.http_utils.class">Blablacar\I18nRoutingBundle\Security\Http\HttpUtils</parameter>
+
         <!-- Router -->
         <parameter key="blablacar_i18n_routing.router.class">Blablacar\I18nRoutingBundle\Routing\Router</parameter>
 
