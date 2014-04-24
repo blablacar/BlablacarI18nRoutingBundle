@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\HttpFoundation\Request;
 
 class Router extends BaseRouter
 {
@@ -123,6 +124,18 @@ class Router extends BaseRouter
 
         // use the default behavior if no localized route exists
         return $generator->generate($name, $parameters, $absolute);
+    }
+
+    /**
+     * matchRequest
+     *
+     * @param Request $request
+     *
+     * @return array|false An array of parameters or false if no route matches
+     */
+    public function matchRequest(Request $request)
+    {
+        return $this->match($request->getPathInfo());
     }
 
     /**
