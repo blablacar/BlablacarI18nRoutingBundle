@@ -2,6 +2,7 @@
 
 namespace Blablacar\I18nRoutingBundle\Routing;
 
+use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
 use Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 use Symfony\Component\Config\ConfigCache;
@@ -13,6 +14,11 @@ use Symfony\Component\Routing\RequestContext;
 
 class Router extends BaseRouter
 {
+    /**
+     * @var CacheInterface
+     */
+    protected $cache;
+
     /**
      * Container
      *
@@ -240,6 +246,11 @@ class Router extends BaseRouter
         return parent::getRouteCollection();
     }
 
+    public function getCachedRouteCollection($name)
+    {
+        return $this->cache->getRoutes($name);
+    }
+
     /**
      * @param UrlGeneratorInterface $generator
      */
@@ -270,5 +281,10 @@ class Router extends BaseRouter
     public function setLoader(I18nLoader $loader)
     {
         $this->loader = $loader;
+    }
+
+    public function setCache(CacheInterface $cache)
+    {
+        $this->cache = $cache;
     }
 }
