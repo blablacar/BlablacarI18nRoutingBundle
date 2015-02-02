@@ -23,4 +23,10 @@ interface CacheInterface
      * @return void
      */
     public function getRoute($name);
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getRoutes($name);
 }

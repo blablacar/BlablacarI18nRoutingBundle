@@ -36,6 +36,9 @@
             <call method="setLoader">
                 <argument type="service" id="blablacar_i18n_routing.loader" />
             </call>
+            <call method="setCache">
+                <argument type="service" id="blablacar_optimized_routing.cache.file" />
+            </call>
         </service>
 
         <!-- LocaleResolver -->
