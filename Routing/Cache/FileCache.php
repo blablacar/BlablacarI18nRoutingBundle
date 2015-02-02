@@ -23,6 +23,11 @@ class FileCache implements CacheInterface
     protected $cachedRoutes = array();
 
     /**
+     * @var Route[]
+     */
+    protected $unserializedRoutes = [];
+
+    /**
      * @param string $cacheDir
      */
     public function __construct($cacheDir)
@@ -58,17 +63,12 @@ class FileCache implements CacheInterface
     public function getRoute($name)
     {
         $prefix = $this->getPrefix($name);
-        if (!array_key_exists($prefix, $this->cachedRoutes)) {
-            $cacheFile = $this->cachePath . DIRECTORY_SEPARATOR . $prefix . '.php';
-            if (! file_exists($cacheFile)) {
-                throw new RouteNotFoundException(sprintf(
-                    'Unable to generate a URL for the named route "%s" as such route does not exist (The cache file with name "%s" was not found',
-                    $name,
-                    $cacheFile
-                ));
-            }
-            $this->cachedRoutes[$prefix] = require $cacheFile;
+
+        if (isset($this->unserializedRoutes[$prefix]) && isset($this->unserializedRoutes[$prefix][$name])) {
+            return $this->unserializedRoutes[$prefix][$name];
         }
+
+        $this->loadPrefix($prefix);
 
         if (!array_key_exists($name, $this->cachedRoutes[$prefix])) {
             throw new RouteNotFoundException(sprintf(
@@ -81,7 +81,36 @@ class FileCache implements CacheInterface
         $route = new Route(null);
         $route->unserialize($data);
 
-        return $route;
+        return $this->unserializedRoutes[$prefix][$name] = $route;
+    }
+
+    public function getRoutes($name)
+    {
+        $prefix = $this->getPrefix($name);
+        $this->loadPrefix($prefix);
+
+        return array_map(function($data) use ($prefix, $name) {
+            $route = new Route(null);
+            $route->unserialize($data);
+
+            return $this->unserializedRoutes[$prefix][$name] = $route;
+        }, $this->cachedRoutes[$prefix]);
+    }
+
+    protected function loadPrefix($prefix)
+    {
+        if (array_key_exists($prefix, $this->cachedRoutes)) {
+            return;
+        }
+
+        if (!file_exists($cacheFile = $this->cachePath . DIRECTORY_SEPARATOR . $prefix . '.php')) {
+            throw new RouteNotFoundException(sprintf(
+                'The cache file with name "%s" was not found',
+                $cacheFile
+            ));
+        }
+        
+        $this->cachedRoutes[$prefix] = require $cacheFile;
     }
 
     /**
