@@ -224,7 +224,7 @@ class Router extends BaseRouter
             $cache->write($dumper->dump($options), $routeCollection->getResources());
         }
 
-        require_once $cache;
+        require_once $cache->getPath();
 
         return $this->matcher = new $class($this->context);
     }
