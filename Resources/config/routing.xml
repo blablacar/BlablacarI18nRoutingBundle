@@ -22,9 +22,6 @@
         <!-- Cache -->
         <parameter key="blablacar_optimized_routing.cache.file.class">Blablacar\I18nRoutingBundle\Routing\Cache\FileCache</parameter>
         <parameter key="blablacar_optimized_routing.cache.i18n_routing_file.class">Blablacar\I18nRoutingBundle\Routing\Cache\I18nRoutingFileCache</parameter>
-
-        <!-- Services -->
-        <parameter key="blablacar_i18n_routing.translator.service">translator</parameter>
     </parameters>
 
     <services>
@@ -51,12 +48,14 @@
         <!-- Loader -->
         <service id="blablacar_i18n_routing.route_exclusion_strategy" class="%blablacar_i18n_routing.route_exclusion_strategy.class%" public="false" />
         <service id="blablacar_i18n_routing.pattern_generation_strategy.default" class="%blablacar_i18n_routing.pattern_generation_strategy.class%" public="false">
-            <argument type="service" id="%blablacar_i18n_routing.translator.service%" />
+            <argument type="service" id="blablacar_i18n_routing.translator" />
             <argument>%available_locales%</argument>
             <argument>%kernel.cache_dir%</argument>
             <argument>routes</argument>
             <argument>%default_locale%</argument>
         </service>
+        <service id="blablacar_i18n_routing.translator" alias="translator" />
+
         <service id="blablacar_i18n_routing.pattern_generation_strategy" alias="blablacar_i18n_routing.pattern_generation_strategy.default" public="false" />
         <service id="blablacar_i18n_routing.loader" class="%blablacar_i18n_routing.loader.class%">
             <argument type="service" id="blablacar_i18n_routing.route_exclusion_strategy" />
