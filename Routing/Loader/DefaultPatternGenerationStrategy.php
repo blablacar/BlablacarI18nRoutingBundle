@@ -82,7 +82,7 @@ class DefaultPatternGenerationStrategy implements PatternGenerationStrategyInter
             }
 
             if ($routeName === $i18nPattern) {
-                $i18nPattern = $route->getPattern();
+                $i18nPattern = $route->getPath();
             }
 
             $patterns[$i18nPattern][] = $locale;
