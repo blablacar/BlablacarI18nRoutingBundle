@@ -84,7 +84,7 @@ class Router extends BaseRouter
      *
      * @return string The generated URL
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $absolute = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         if (null === $name || empty($name)) {
             throw new \InvalidArgumentException('The route name is empty');
@@ -101,7 +101,7 @@ class Router extends BaseRouter
         // if the locale is changed, and we have a host map, then we need to
         // generate an absolute URL
         if ($currentLocale && $currentLocale !== $locale && $this->hostMap) {
-            $absolute = true;
+            $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
         }
 
         $generator = $this->getGenerator();
