@@ -163,9 +163,9 @@ class Router extends BaseRouter
 
         // No request. What append ?
         $currentLocale = null;
-        if ($this->container->isScopeActive('request')) {
+        if ($this->container->has('request_stack')) {
             $currentLocale = $this->localeResolver->resolveLocale(
-                $this->container->get('request')
+                $this->container->get('request_stack')->getCurrentRequest()
             );
         }
 
