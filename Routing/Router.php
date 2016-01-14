@@ -78,13 +78,13 @@ class Router extends BaseRouter
     /**
      * Generates a URL from the given parameters.
      *
-     * @param string  $name       The name of the route
-     * @param array   $parameters An array of parameters
-     * @param Boolean $absolute   Whether to generate an absolute URL
+     * @param string  $name          The name of the route
+     * @param array   $parameters    An array of parameters
+     * @param int $referenceType Generate an absolute URL or PATH.
      *
      * @return string The generated URL
      */
-    public function generate($name, $parameters = array(), $absolute = UrlGeneratorInterface::ABSOLUTE_URL)
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
         if (null === $name || empty($name)) {
             throw new \InvalidArgumentException('The route name is empty');
@@ -101,27 +101,27 @@ class Router extends BaseRouter
         // if the locale is changed, and we have a host map, then we need to
         // generate an absolute URL
         if ($currentLocale && $currentLocale !== $locale && $this->hostMap) {
-            $absolute = UrlGeneratorInterface::ABSOLUTE_PATH;
+            $referenceType = self::ABSOLUTE_URL;
         }
 
         $generator = $this->getGenerator();
 
         // if an absolute URL is requested, we set the correct host
-        if ($absolute && $this->hostMap) {
+        if (!$referenceType && $this->hostMap) {
             $currentHost = $this->context->getHost();
             $this->context->setHost($this->hostMap[$locale]);
         }
 
         try {
-            $url = $generator->generate($locale.I18nLoader::ROUTING_PREFIX.$name, $parameters, $absolute);
+            $url = $generator->generate($locale.I18nLoader::ROUTING_PREFIX.$name, $parameters, $referenceType);
 
-            if ($absolute && $this->hostMap) {
+            if (!$referenceType && $this->hostMap) {
                 $this->context->setHost($currentHost);
             }
 
             return $url;
         } catch (RouteNotFoundException $ex) {
-            if ($absolute && $this->hostMap) {
+            if (!$referenceType && $this->hostMap) {
                 $this->context->setHost($currentHost);
             }
 
@@ -129,7 +129,7 @@ class Router extends BaseRouter
         }
 
         // use the default behavior if no localized route exists
-        return $generator->generate($name, $parameters, $absolute);
+        return $generator->generate($name, $parameters, $referenceType);
     }
 
     /**
@@ -161,13 +161,9 @@ class Router extends BaseRouter
             throw new ResourceNotFoundException();
         }
 
-        // No request. What append ?
-        $currentLocale = null;
-        if ($this->container->has('request_stack')) {
-            $currentLocale = $this->localeResolver->resolveLocale(
-                $this->container->get('request_stack')->getCurrentRequest()
-            );
-        }
+        $currentLocale = $this->localeResolver->resolveLocale(
+            $this->container->get('request_stack')->getCurrentRequest()
+        );
 
         // Clean the route name
         if (false !== $pos = strpos($params['_route'], I18nLoader::ROUTING_PREFIX)) {
