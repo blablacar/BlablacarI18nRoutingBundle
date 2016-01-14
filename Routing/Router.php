@@ -167,9 +167,11 @@ class Router extends BaseRouter
             throw new ResourceNotFoundException();
         }
 
-        $currentLocale = $this->localeResolver->resolveLocale(
-            $this->container->get('request_stack')->getCurrentRequest()
-        );
+        $currentLocale = 'en_GB';
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        if ($request instanceof Request) {
+            $currentLocale = $this->localeResolver->resolveLocale($request);
+        }
 
         // Clean the route name
         if (false !== $pos = strpos($params['_route'], I18nLoader::ROUTING_PREFIX)) {
