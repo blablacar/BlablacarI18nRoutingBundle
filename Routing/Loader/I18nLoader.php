@@ -56,6 +56,14 @@ class I18nLoader
                 if (count($locales) > 1) {
                     $catchMultipleRoute = clone $route;
                     $catchMultipleRoute->setPath($pattern);
+
+                    $redirectToLocale = $route->getOption('redirect_to_locale');
+
+                    if ($redirectToLocale !== null && !in_array($redirectToLocale, $locales)) {
+                        $catchMultipleRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
+                        $catchMultipleRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                    }
+
                     $catchMultipleRoute->setDefault('_locales', $locales);
                     $i18nCollection->add(implode('_', $locales).I18nLoader::ROUTING_PREFIX.$name, $catchMultipleRoute);
                 }

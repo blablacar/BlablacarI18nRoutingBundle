@@ -187,8 +187,17 @@ class Router extends BaseRouter
             unset($params['_locales']);
         }
 
+        $redirectToLocale = $this->getOriginalRouteCollection()->get($params['_route'])->getOption('redirect_to_locale');
+
+        if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
+            $routeLocales[] = $currentLocale;
+        }
+
         if (0 === count($routeLocales) || in_array($currentLocale, $routeLocales)) {
-            $params['_locale'] = $currentLocale;
+            // don't add _locale parameter to redirects
+            if ($params['_controller'] != 'FrameworkBundle:Redirect:redirect') {
+                $params['_locale'] = $currentLocale;
+            }
 
             return $params;
         }
