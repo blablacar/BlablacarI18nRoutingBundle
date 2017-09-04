@@ -123,6 +123,8 @@ class Router extends BaseRouter
 
             if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
                 $locale = $redirectToLocale;
+
+                unset($parameters['_locale']);
             }
 
             $url = $generator->generate($locale . I18nLoader::ROUTING_PREFIX . $name, $parameters, $referenceType);
