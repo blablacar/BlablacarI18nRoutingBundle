@@ -195,7 +195,7 @@ class Router extends BaseRouter
 
         if (0 === count($routeLocales) || in_array($currentLocale, $routeLocales)) {
             // don't add _locale parameter to redirects
-            if ($params['_controller'] != 'FrameworkBundle:Redirect:redirect') {
+            if (isset($params['_controller']) && $params['_controller'] != 'FrameworkBundle:Redirect:redirect') {
                 $params['_locale'] = $currentLocale;
             }
 
