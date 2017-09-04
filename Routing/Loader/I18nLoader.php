@@ -62,6 +62,7 @@ class I18nLoader
                     if ($redirectToLocale !== null && !in_array($redirectToLocale, $locales)) {
                         $catchMultipleRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
                         $catchMultipleRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                        $catchMultipleRoute->setDefault('permanent', true);
                     }
 
                     $catchMultipleRoute->setDefault('_locales', $locales);
@@ -75,6 +76,7 @@ class I18nLoader
                     if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
                         $localeRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
                         $localeRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                        $localeRoute->setDefault('permanent', true);
                     } else {
                         $localeRoute->setDefault('_locale', $locale);
                     }
