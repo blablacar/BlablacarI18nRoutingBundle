@@ -71,7 +71,14 @@ class I18nLoader
                 foreach ($locales as $locale) {
                     $localeRoute = clone $route;
                     $localeRoute->setPath($pattern);
-                    $localeRoute->setDefault('_locale', $locale);
+
+                    if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
+                        $localeRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
+                        $localeRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                    } else {
+                        $localeRoute->setDefault('_locale', $locale);
+                    }
+
                     $i18nCollection->add($locale.I18nLoader::ROUTING_PREFIX.$name, $localeRoute);
                 }
             }
