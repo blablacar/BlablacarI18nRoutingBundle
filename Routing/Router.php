@@ -119,6 +119,12 @@ class Router extends BaseRouter
         }
 
         try {
+            $redirectToLocale = $this->getOriginalRouteCollection()->get($name)->getOption('redirect_to_locale');
+
+            if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
+                $locale = $redirectToLocale;
+            }
+
             $url = $generator->generate($locale . I18nLoader::ROUTING_PREFIX . $name, $parameters, $referenceType);
 
             if (!$referenceType && $this->hostMap) {
