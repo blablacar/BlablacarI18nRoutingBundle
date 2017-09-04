@@ -50,14 +50,14 @@ class I18nLoader
                 continue;
             }
 
+            $redirectToLocale = $route->getOption('redirect_to_locale');
+
             foreach ($this->patternGenerationStrategy->generateI18nPatterns($name, $route) as $pattern => $locales) {
                 // If this pattern is used for more than one locale, we need to keep the original route.
                 // We still add individual routes for each locale afterwards for faster generation.
                 if (count($locales) > 1) {
                     $catchMultipleRoute = clone $route;
                     $catchMultipleRoute->setPath($pattern);
-
-                    $redirectToLocale = $route->getOption('redirect_to_locale');
 
                     if ($redirectToLocale !== null && !in_array($redirectToLocale, $locales)) {
                         $catchMultipleRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
