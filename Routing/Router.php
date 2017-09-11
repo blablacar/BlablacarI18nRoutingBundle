@@ -124,7 +124,7 @@ class Router extends BaseRouter
             if ($route !== null) {
                 $redirectToLocale = $route->getOption('redirect_to_locale');
 
-                if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
+                if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
                     $locale = $redirectToLocale;
 
                     unset($parameters['_locale']);
