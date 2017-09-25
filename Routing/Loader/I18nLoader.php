@@ -50,12 +50,21 @@ class I18nLoader
                 continue;
             }
 
+            $redirectToLocale = $route->getOption('redirect_to_locale');
+
             foreach ($this->patternGenerationStrategy->generateI18nPatterns($name, $route) as $pattern => $locales) {
                 // If this pattern is used for more than one locale, we need to keep the original route.
                 // We still add individual routes for each locale afterwards for faster generation.
                 if (count($locales) > 1) {
                     $catchMultipleRoute = clone $route;
                     $catchMultipleRoute->setPath($pattern);
+
+                    if ($redirectToLocale !== null && !in_array($redirectToLocale, $locales)) {
+                        $catchMultipleRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
+                        $catchMultipleRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                        $catchMultipleRoute->setDefault('permanent', true);
+                    }
+
                     $catchMultipleRoute->setDefault('_locales', $locales);
                     $i18nCollection->add(implode('_', $locales).I18nLoader::ROUTING_PREFIX.$name, $catchMultipleRoute);
                 }
@@ -63,7 +72,15 @@ class I18nLoader
                 foreach ($locales as $locale) {
                     $localeRoute = clone $route;
                     $localeRoute->setPath($pattern);
-                    $localeRoute->setDefault('_locale', $locale);
+
+                    if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
+                        $localeRoute->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
+                        $localeRoute->setDefault('route', $redirectToLocale . I18nLoader::ROUTING_PREFIX . $name);
+                        $localeRoute->setDefault('permanent', true);
+                    } else {
+                        $localeRoute->setDefault('_locale', $locale);
+                    }
+
                     $i18nCollection->add($locale.I18nLoader::ROUTING_PREFIX.$name, $localeRoute);
                 }
             }
