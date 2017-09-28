@@ -119,16 +119,19 @@ class Router extends BaseRouter
         }
 
         try {
-            $route = $this->getOriginalRouteCollection()->get($name);
+            $routes = $this->getCachedRouteCollection($currentLocale);
 
-            if ($route !== null) {
-                $redirectToLocale = $route->getOption('redirect_to_locale');
+            $redirectToLocale = null;
 
-                if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
-                    $locale = $redirectToLocale;
+            if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $name])) {
+                $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
+            }
 
-                    unset($parameters['_locale']);
-                }
+            if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
+
+                $locale = $redirectToLocale;
+
+                unset($parameters['_locale']);
             }
 
             $url = $generator->generate($locale . I18nLoader::ROUTING_PREFIX . $name, $parameters, $referenceType);
@@ -199,7 +202,13 @@ class Router extends BaseRouter
             unset($params['_locales']);
         }
 
-        $redirectToLocale = $this->getOriginalRouteCollection()->get($params['_route'])->getOption('redirect_to_locale');
+        $routes = $this->getCachedRouteCollection($currentLocale);
+
+        $redirectToLocale = null;
+
+        if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
+            $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
+        }
 
         if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
             $routeLocales[] = $currentLocale;
