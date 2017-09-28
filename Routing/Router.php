@@ -97,7 +97,7 @@ class Router extends BaseRouter
 
         // determine the most suitable locale to use for route generation
         $currentLocale = $this->context->getParameter('_locale');
-        if (isset($parameters['_locale'])) {
+        if (isset($parameters['_locale']) && $parameters['_locale'] !== null) {
             $locale = $parameters['_locale'];
         } else {
             $locale = $currentLocale;
@@ -119,12 +119,23 @@ class Router extends BaseRouter
         }
 
         try {
-            $routes = $this->getCachedRouteCollection($currentLocale);
+            if ($currentLocale !== null) {
+                $cachedRoutesLocale = $currentLocale;
+            }
 
-            $redirectToLocale = null;
+            if ($locale !== null) {
+                $cachedRoutesLocale = $locale;
+            }
 
-            if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $name])) {
-                $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
+            if ($currentLocale !== null && $locale !== null) {
+                $cachedRoutesLocale = $currentLocale;
+            }
+
+            $cachedRoutes = $this->getCachedRouteCollection($cachedRoutesLocale);
+
+
+            if (isset($cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name])) {
+                $redirectToLocale = $cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
             }
 
             if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
