@@ -208,8 +208,8 @@ class Router extends BaseRouter
 
         $redirectToLocale = null;
 
-        if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
-            $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
+        if (isset($routes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
+            $redirectToLocale = $routes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
         }
 
         if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
