@@ -184,7 +184,7 @@ class Router extends BaseRouter
             throw new ResourceNotFoundException();
         }
 
-        $currentLocale = 'en_GB';
+        $cachedRoutesLocale = $currentLocale = 'en_GB';
         $request = $this->container->get('request_stack')->getCurrentRequest();
         if ($request instanceof Request) {
             $currentLocale = $this->localeResolver->resolveLocale($request);
@@ -204,7 +204,7 @@ class Router extends BaseRouter
             unset($params['_locales']);
         }
 
-        $routes = $this->getCachedRouteCollection($currentLocale);
+        $routes = $this->getCachedRouteCollection($cachedRoutesLocale);
 
         $redirectToLocale = null;
 
