@@ -119,6 +119,8 @@ class Router extends BaseRouter
         }
 
         try {
+            $cachedRoutesLocale = null;
+
             if ($currentLocale !== null) {
                 $cachedRoutesLocale = $currentLocale;
             }
@@ -131,19 +133,21 @@ class Router extends BaseRouter
                 $cachedRoutesLocale = $currentLocale;
             }
 
-            $cachedRoutes = $this->getCachedRouteCollection($cachedRoutesLocale);
+            if ($cachedRoutesLocale !== null) {
+                $cachedRoutes = $this->getCachedRouteCollection($cachedRoutesLocale);
 
-            $redirectToLocale = null;
+                $redirectToLocale = null;
 
-            if (isset($cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name])) {
-                $redirectToLocale = $cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
-            }
+                if (isset($cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name])) {
+                    $redirectToLocale = $cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
+                }
 
-            if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
+                if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
 
-                $locale = $redirectToLocale;
+                    $locale = $redirectToLocale;
 
-                unset($parameters['_locale']);
+                    unset($parameters['_locale']);
+                }
             }
 
             $url = $generator->generate($locale . I18nLoader::ROUTING_PREFIX . $name, $parameters, $referenceType);
@@ -154,11 +158,6 @@ class Router extends BaseRouter
 
             return $url;
         } catch (RouteNotFoundException $ex) {
-            if ($name === 'blablacar_security_security_login') {
-                var_dump($cachedRoutesLocale, $currentLocale, $locale); die;
-            }
-
-//            var_dump($name, $parameters['_locale'], $locale, $currentLocale); die;
             if (!$referenceType && $this->hostMap) {
                 $this->context->setHost($currentHost);
             }
