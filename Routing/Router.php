@@ -133,6 +133,7 @@ class Router extends BaseRouter
 
             $cachedRoutes = $this->getCachedRouteCollection($cachedRoutesLocale);
 
+            $redirectToLocale = null;
 
             if (isset($cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name])) {
                 $redirectToLocale = $cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
@@ -153,6 +154,11 @@ class Router extends BaseRouter
 
             return $url;
         } catch (RouteNotFoundException $ex) {
+            if ($name === 'blablacar_security_security_login') {
+                var_dump($cachedRoutesLocale, $currentLocale, $locale); die;
+            }
+
+//            var_dump($name, $parameters['_locale'], $locale, $currentLocale); die;
             if (!$referenceType && $this->hostMap) {
                 $this->context->setHost($currentHost);
             }
