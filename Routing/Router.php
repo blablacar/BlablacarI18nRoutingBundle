@@ -184,7 +184,7 @@ class Router extends BaseRouter
             throw new ResourceNotFoundException();
         }
 
-        $cachedRoutesLocale = $currentLocale = 'en_GB';
+        $currentLocale = 'en_GB';
         $request = $this->container->get('request_stack')->getCurrentRequest();
         if ($request instanceof Request) {
             $currentLocale = $this->localeResolver->resolveLocale($request);
@@ -204,12 +204,12 @@ class Router extends BaseRouter
             unset($params['_locales']);
         }
 
-        $routes = $this->getCachedRouteCollection($cachedRoutesLocale);
+        $routes = $this->getCachedRouteCollection($currentLocale);
 
         $redirectToLocale = null;
 
-        if (isset($routes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
-            $redirectToLocale = $routes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
+        if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
+            $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
         }
 
         if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
