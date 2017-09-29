@@ -161,6 +161,14 @@ class FileCache implements CacheInterface
      */
     protected function getPrefix($name)
     {
+        $exceptions = ['sr_Latn_RS'];
+
+        foreach ($exceptions as $exception) {
+            if (strstr($name, 'sr_Latn_RS') !== false) {
+                return $exception;
+            }
+        }
+
         return substr($name, 0, 5);
     }
 }
