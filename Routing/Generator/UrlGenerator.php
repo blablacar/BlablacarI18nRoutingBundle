@@ -30,6 +30,15 @@ class UrlGenerator extends BaseUrlGenerator
     }
 
     /**
+     * @param string $name The name of the route
+     *
+     * @return array Defaults of the Route
+     */
+    public function getRouteDefaults($name) {
+        return $this->cache->getRoute($name)->getDefaults();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
