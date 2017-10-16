@@ -3,6 +3,7 @@
 namespace Blablacar\I18nRoutingBundle\Routing;
 
 use Blablacar\I18nRoutingBundle\Routing\Cache\CacheInterface;
+use Blablacar\I18nRoutingBundle\Routing\Generator\UrlGenerator;
 use Blablacar\I18nRoutingBundle\Routing\Loader\I18nLoader;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 use Symfony\Component\Config\ConfigCache;
@@ -97,7 +98,7 @@ class Router extends BaseRouter
 
         // determine the most suitable locale to use for route generation
         $currentLocale = $this->context->getParameter('_locale');
-        if (isset($parameters['_locale']) && $parameters['_locale'] !== null) {
+        if (isset($parameters['_locale'])) {
             $locale = $parameters['_locale'];
         } else {
             $locale = $currentLocale;
@@ -119,21 +120,15 @@ class Router extends BaseRouter
         }
 
         try {
-            $cachedRoutesLocale = 'en_GB';
-
-            $cachedRoutes = $this->getCachedRouteCollection($cachedRoutesLocale);
-
             $redirectToLocale = null;
+            if ($generator instanceof UrlGenerator) {
+                $cachedRoutesLocale = 'en_GB';
+                $routeDefaults = $generator->getRouteDefaults($cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name);
 
-            if (isset($cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name])) {
-                $redirectToLocale = $cachedRoutes[$cachedRoutesLocale . I18nLoader::ROUTING_PREFIX . $name]->getOption('redirect_to_locale');
-            }
-
-            if ($redirectToLocale !== null && $redirectToLocale !== $locale) {
-
-                $locale = $redirectToLocale;
-
-                unset($parameters['_locale']);
+                if (isset($routeDefaults['redirect_to_locale']) && $routeDefaults['redirect_to_locale'] !== $locale) {
+                    $locale = $routeDefaults['redirect_to_locale'];
+                    unset($parameters['_locale']);
+                }
             }
 
             $url = $generator->generate($locale . I18nLoader::ROUTING_PREFIX . $name, $parameters, $referenceType);
@@ -204,15 +199,7 @@ class Router extends BaseRouter
             unset($params['_locales']);
         }
 
-        $routes = $this->getCachedRouteCollection($currentLocale);
-
-        $redirectToLocale = null;
-
-        if (isset($routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']])) {
-            $redirectToLocale = $routes[$currentLocale . I18nLoader::ROUTING_PREFIX . $params['_route']]->getOption('redirect_to_locale');
-        }
-
-        if ($redirectToLocale !== null && $redirectToLocale !== $currentLocale) {
+        if (isset($params['redirect_to_locale']) && $params['redirect_to_locale'] !== $currentLocale) {
             $routeLocales[] = $currentLocale;
         }
 
