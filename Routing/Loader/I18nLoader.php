@@ -50,7 +50,7 @@ class I18nLoader
                 continue;
             }
 
-            $redirectToLocale = $route->getOption('redirect_to_locale');
+            $redirectToLocale = $route->getDefault('redirect_to_locale');
 
             foreach ($this->patternGenerationStrategy->generateI18nPatterns($name, $route) as $pattern => $locales) {
                 // If this pattern is used for more than one locale, we need to keep the original route.
