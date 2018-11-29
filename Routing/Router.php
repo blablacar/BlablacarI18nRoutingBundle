@@ -139,11 +139,7 @@ class Router extends BaseRouter
 
             return $url;
         } catch (RouteNotFoundException $ex) {
-            if (!$referenceType && $this->hostMap) {
-                $this->context->setHost($currentHost);
-            }
 
-            // fallback to default behavior
         }
 
         // use the default behavior if no localized route exists
